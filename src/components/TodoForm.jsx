@@ -55,7 +55,7 @@ const TodoForm = ({ todos, setTodos, currentTodo, setCurrentTodo }) => {
         autoComplete="off"
       />
       <button className="py-2 px-3 h-[48px] rounded-r-md text-sm bg-gradient-to-r from-[#540CFE] to-[#8C00F9] hover:from-[#4a0bdd] hover:to-[#7a03d4]">
-        Add Todo
+        {currentTodo ? "Edit Todo" : "Add Todo"}
       </button>
     </form>
   );
