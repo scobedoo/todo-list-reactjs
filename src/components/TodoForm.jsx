@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const TodoForm = ({ todos, setTodos, currentTodo, setCurrentTodo }) => {
   const [inputText, setInputText] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (currentTodo) {
@@ -15,30 +16,41 @@ const TodoForm = ({ todos, setTodos, currentTodo, setCurrentTodo }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTodos([
-      ...todos,
-      {
-        text: inputText,
-        isCompleted: false,
-        id: Math.floor(Math.random() * 10000),
-      },
-    ]);
-    setInputText("");
+    if (inputText.trim() === "") {
+      setError("Please enter a todo");
+    } else {
+      setTodos([
+        ...todos,
+        {
+          text: inputText,
+          isCompleted: false,
+          id: Math.floor(Math.random() * 10000),
+        },
+      ]);
+      setError(null);
+      setInputText("");
+    }
   };
 
   const handleEdit = (e) => {
     e.preventDefault();
-    setTodos(
-      todos.map((item) => {
-        if (item.id === currentTodo.id) {
-          return {
-            ...item,
-            text: inputText,
-          };
-        }
-        return item;
-      })
-    );
+    if (inputText.trim() === "") {
+      setError("Please enter a todo");
+      return;
+    } else {
+      setTodos(
+        todos.map((item) => {
+          if (item.id === currentTodo.id) {
+            return {
+              ...item,
+              text: inputText,
+            };
+          }
+          return item;
+        })
+      );
+    }
+    setError(null);
     setCurrentTodo(null);
     setInputText("");
   };
@@ -57,6 +69,7 @@ const TodoForm = ({ todos, setTodos, currentTodo, setCurrentTodo }) => {
       <button className="py-2 px-3 h-[48px] rounded-r-md text-sm bg-gradient-to-r from-[#540CFE] to-[#8C00F9] hover:from-[#4a0bdd] hover:to-[#7a03d4]">
         {currentTodo ? "Edit Todo" : "Add Todo"}
       </button>
+      <p className="text-left pl-9 pt-3 text-sm text-red-500">{error}</p>
     </form>
   );
 };
